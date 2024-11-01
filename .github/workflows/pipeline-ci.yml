@@ -1,0 +1,41 @@
+name: CI/CD para Testes Automatizados em Java
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checkout do código fonte
+    - name: Checkout do Código
+      uses: actions/checkout@v2
+
+    # Configuração do JDK
+    - name: Configurar JDK 17
+      uses: actions/setup-java@v2
+      with:
+        java-version: '17'
+        distribution: 'adopt'
+
+    # Instalar dependências do projeto
+    - name: Build do Projeto com Maven
+      run: mvn install -DskipTests
+
+    # Executar os testes automatizados
+    - name: Executar Testes
+      run: mvn test
+
+    # Publicar os relatórios de testes (opcional)
+    - name: Publicar Relatórios de Teste
+      if: always()
+      uses: actions/upload-artifact@v2
+      with:
+        name: relatorios-de-testes
+        path: target/surefire-reports/
