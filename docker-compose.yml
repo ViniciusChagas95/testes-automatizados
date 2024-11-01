@@ -1,23 +1,19 @@
 version: '3.8'
-services:
-  app-principal:
-    image: catastrofes_ambientais
-    container_name: app_principal
-    build:
-      context: ../catastrofes-ambientais
-      dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
-    environment:
-      - SPRING_PROFILES_ACTIVE=dev
-    depends_on:
-      - db
 
+services:
   db:
     image: mysql:8.0
-    container_name: mysql_db
+    container_name: mysql-container
+    restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: catastrofes
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: catastrofes_ambientais
+      MYSQL_USER: root
+      MYSQL_PASSWORD: rootpassword
     ports:
       - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
