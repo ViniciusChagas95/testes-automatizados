@@ -28,6 +28,14 @@ jobs:
     - name: Build do Projeto com Maven
       run: mvn install -DskipTests
 
+    # Iniciar Docker Compose para rodar o projeto principal
+    - name: Iniciar Docker Compose
+      run: docker-compose up -d
+
+    # Aguardar um tempo para garantir que o projeto esteja totalmente inicializado
+    - name: Aguardar 30 segundos
+      run: sleep 30
+
     # Executar os testes automatizados
     - name: Executar Testes
       run: mvn test
@@ -39,3 +47,7 @@ jobs:
       with:
         name: relatorios-de-testes
         path: target/surefire-reports/
+
+    # Parar Docker Compose após os testes
+    - name: Parar Docker Compose
+      run: docker-compose down
